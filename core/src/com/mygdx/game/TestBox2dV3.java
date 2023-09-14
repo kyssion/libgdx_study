@@ -92,25 +92,6 @@ public class TestBox2dV3 extends ApplicationAdapter {
         );
         batch.end();
 
-        // 获取五星的线速度
-        Vector2 linearVelocity = dogBody.getLinearVelocity();
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && linearVelocity.x <= 2) { // 现在最大速度为 2，不然会放飞自我
-            // 施加冲动 让物体运行起来，可以看成我们推一下物体就往一边移动了
-            dogBody.applyLinearImpulse(new Vector2(0.1f, 0), dogBody.getWorldCenter(), true);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && linearVelocity.x >= -2) {
-            dogBody.applyLinearImpulse(new Vector2(-0.1f, 0), dogBody.getWorldCenter(), true);
-        }
-
-        // 跳起来的逻辑，比较简单。但是时候这个演示
-        if (!isJump && Gdx.input.isKeyPressed(Input.Keys.W) && linearVelocity.y <= 4) {
-            dogBody.applyLinearImpulse(new Vector2(0, 4), dogBody.getWorldCenter(), true);
-            isJump = true;
-        }
-        if (linearVelocity.y == 0) {
-            isJump = false;
-        }
-
         // 给Box2D世界里的物体绘制轮廓，让我们看得更清楚，正式游戏需要注释掉这个渲染
         debugRenderer.render(world, camera.combined);
 
