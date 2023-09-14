@@ -35,11 +35,9 @@ public class TestBox2dV3 extends ApplicationAdapter {
 
         // 图片一： 50*50 缩小100倍就是 0.5*0.5 在绘制时缩小的
         dog = new TextureRegion(new Texture("badlogic.jpg"), 24, 24);
-        // 图片二： 256*256...
-        img = new TextureRegion(new Texture("badlogic.jpg"), 100, 100);
 
         // 创建一个世界，里面的重力加速度为 10
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -10), false);
         // 试调渲染，可以使用这个渲染观察到我们用Box2D绘制的物体图形
         debugRenderer = new Box2DDebugRenderer();
 
@@ -54,54 +52,50 @@ public class TestBox2dV3 extends ApplicationAdapter {
         地面轮廓.setAsBox(Gdx.graphics.getWidth(), 1);// 物体的宽高
         groundBody.createFixture(地面轮廓, 0); // 静态物体的质量应该设为0
 
-        // 创建一个静态物体，我们当他是障碍物即可
-        BodyDef 静态物体定义 = new BodyDef();
-        静态物体定义.type = BodyDef.BodyType.StaticBody;
-        静态物体定义.position.x = 0;
-        静态物体定义.position.y = 1 + (float)100/2/reduce; // 注意这里单位是m
-        Body badlogicBody = world.createBody(静态物体定义);
-        PolygonShape 静态物体轮廓 = new PolygonShape();
-        静态物体轮廓.setAsBox((float) 100 / 2 / reduce, (float) 100 / 2 / reduce);// 图形绘制是由中心绘制的，所以要除一半
-        badlogicBody.createFixture(静态物体轮廓, 0); // 静态物体的质量应该设为0
+        dogBody = CreateNewItem(0);
+        CreateNewItem(1);
+        CreateNewItem(2);
 
+    }
+
+    public Body CreateNewItem(int v) {
         // 再添加一个动态物体，可以把他看成玩家
         BodyDef 用户物体定义 = new BodyDef();
         用户物体定义.type = BodyDef.BodyType.DynamicBody;
-        用户物体定义.position.x = 0;
-        用户物体定义.position.y = 8;
-        dogBody = world.createBody(用户物体定义);
+        用户物体定义.position.x = v/reduce*5;
+        用户物体定义.position.y = 8+v;
+        Body bodyItem = world.createBody(用户物体定义);
         PolygonShape 用户物体轮廓 = new PolygonShape();
         用户物体轮廓.setAsBox((float)24 / 2 / reduce, (float) 24 / 2 / reduce);
 
         // 给物体添加一些属性
         FixtureDef 用户物体工具 = new FixtureDef();
         用户物体工具.shape = 用户物体轮廓;// 形状
-        用户物体工具.restitution = 0.2f; // 设置这个值后，物体掉落到地面就会弹起一点高度...
-        dogBody.createFixture(用户物体工具).setUserData(this);//设置自定义数据可以从这个物体获取这个数据对象
-        // 上面的图形要处理掉
-        静态物体轮廓.dispose();
+        用户物体工具.restitution = 0.5f; // 设置这个值后，物体掉落到地面就会弹起一点高度...
+        用户物体工具.density = 0.3f;
+        bodyItem.createFixture(用户物体工具).setUserData(this);//设置自定义数据可以从这个物体获取这个数据对象
         用户物体轮廓.dispose();
+        return bodyItem;
     }
 
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        System.out.println(dogBody.getTransform().getRotation());
         // 获取 物体的位置
         Vector2 position = dogBody.getPosition();
 
         // 将相机与批处理精灵绑定
         camera.position.set(0, 5, 0);
         camera.update();
-
         // 将绘制与相机投影绑定 关键 关键
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(img, 0-100/2/reduce, 1, 0, 0, 100, 100, 0.01f, 0.01f, 0);
         batch.draw(dog, position.x - 24 / 2 / reduce, position.y - 24 / 2 / reduce, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
                 0, 0, 24, 24, // 绘制图片的一部分，这里就是全部了
                 1 / reduce, 1 / reduce, // 缩小100倍
-                0 // 不旋转
+                dogBody.getTransform().getRotation() // 不旋转
         );
         batch.end();
 
