@@ -26,7 +26,7 @@ public class libgdx文字 extends ApplicationAdapter {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         batch.begin();
         //\n是换行
-        font.draw(batch, "hello world!\n你好世界!", 100, 400);
+        font.draw(batch, "hello world!\n你好世界!", 0, 40);
         batch.end();
     }
 

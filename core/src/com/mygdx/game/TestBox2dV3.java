@@ -28,7 +28,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
     private World world;
     private Box2DDebugRenderer debugRenderer;
     // 在正常像素下物体重力现象不明显，需要对纹理进行缩小100++倍才有比较明显的物理效果
-    private float reduce = 100;// 缩小100 倍易于观察到物理现象'
+    private float reduce = 50;// 缩小100 倍易于观察到物理现象'
     List<Dog> dogList;
     private BitmapFont font;
 
@@ -57,15 +57,15 @@ public class TestBox2dV3 extends ApplicationAdapter {
         //设置黑色
         font.setColor(Color.WHITE);
         //设置三倍大小
-        font.getData().setScale(0.4f);
-
+        font.getData().setScale(0.01f);
+        font.setUseIntegerPositions(false);
         this.boxNum = 0;
     }
     public void createRight(){
         // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
-        groundBodyDef.position.x = 5;// 位置
+        groundBodyDef.position.x = 12;// 位置
         groundBodyDef.position.y = 0;
         // 创建这个地面的身体，我们对这个物体
         Body groundBody = world.createBody(groundBodyDef);
@@ -79,7 +79,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
-        groundBodyDef.position.x = -5;// 位置
+        groundBodyDef.position.x = -12;// 位置
         groundBodyDef.position.y = 0;
         // 创建这个地面的身体，我们对这个物体
         Body groundBody = world.createBody(groundBodyDef);
@@ -107,18 +107,21 @@ public class TestBox2dV3 extends ApplicationAdapter {
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        dogList.add(new Dog(10,10,world,dog).InitBody(reduce));
+        int fps =  Gdx.graphics.getFramesPerSecond();
+        if (fps>=30){
+            dogList.add(new Dog(10,10,world,dog).InitBody(reduce));
+            boxNum++;
+        }
 
-        boxNum++;
 
         // 将相机与批处理精灵绑定
-        camera.position.set(0,5, 0);
+        camera.position.set(0,8, 0);
         camera.update();
 
         // 将绘制与相机投影绑定 关键 关键
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "hello world!\n你好世界!", 100, 400);
+        font.draw(batch, "boxNum : "+boxNum +"\n fps : "+ Gdx.graphics.getFramesPerSecond(), 0, 0/reduce);
         for (Dog dog : dogList){
             dog.Draw(batch,reduce);
         }
@@ -129,7 +132,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         debugRenderer.render(world, camera.combined);
 
         // 更新世界里的关系 这个要放在绘制之后，最好放最后面
-        world.step(1 / 60f, 6, 2);
+        world.step(1 / 120f, 6, 2);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class Dog {
         BodyDef dogBodyDef = new BodyDef();
         dogBodyDef.type = BodyDef.BodyType.DynamicBody;
         dogBodyDef.position.x = 0;
-        dogBodyDef.position.y = 10;
+        dogBodyDef.position.y = 15;
         Body dogBody = world.createBody(dogBodyDef);
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.setAsBox(this.width / 2.0f / reduce, this.heigth / 2.0f / reduce);
