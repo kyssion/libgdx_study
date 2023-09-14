@@ -37,7 +37,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         dog = new TextureRegion(new Texture("badlogic.jpg"), 24, 24);
 
         // 创建一个世界，里面的重力加速度为 10
-        world = new World(new Vector2(0, -10), false);
+        world = new World(new Vector2(0, -10), true);
         // 试调渲染，可以使用这个渲染观察到我们用Box2D绘制的物体图形
         debugRenderer = new Box2DDebugRenderer();
 
@@ -49,20 +49,20 @@ public class TestBox2dV3 extends ApplicationAdapter {
         // 创建这个地面的身体，我们对这个物体
         Body groundBody = world.createBody(地面定义);
         PolygonShape 地面轮廓 = new PolygonShape();// 物体的形状，这样创建是矩形的
-        地面轮廓.setAsBox(Gdx.graphics.getWidth(), 1);// 物体的宽高
+        地面轮廓.setAsBox(Gdx.graphics.getWidth(), 0);// 物体的宽高
         groundBody.createFixture(地面轮廓, 0); // 静态物体的质量应该设为0
 
-        dogBody = CreateNewItem(0);
+        dogBody= CreateNewItem(0);
         CreateNewItem(1);
         CreateNewItem(2);
 
     }
 
-    public Body CreateNewItem(int v) {
+    public Body CreateNewItem(int v){
         // 再添加一个动态物体，可以把他看成玩家
         BodyDef 用户物体定义 = new BodyDef();
         用户物体定义.type = BodyDef.BodyType.DynamicBody;
-        用户物体定义.position.x = v/reduce*5;
+        用户物体定义.position.x = v;
         用户物体定义.position.y = 8+v;
         Body bodyItem = world.createBody(用户物体定义);
         PolygonShape 用户物体轮廓 = new PolygonShape();
@@ -71,8 +71,8 @@ public class TestBox2dV3 extends ApplicationAdapter {
         // 给物体添加一些属性
         FixtureDef 用户物体工具 = new FixtureDef();
         用户物体工具.shape = 用户物体轮廓;// 形状
-        用户物体工具.restitution = 0.5f; // 设置这个值后，物体掉落到地面就会弹起一点高度...
-        用户物体工具.density = 0.3f;
+        用户物体工具.restitution = 0.4f; // 设置这个值后，物体掉落到地面就会弹起一点高度...
+        用户物体工具.density=1f;
         bodyItem.createFixture(用户物体工具).setUserData(this);//设置自定义数据可以从这个物体获取这个数据对象
         用户物体轮廓.dispose();
         return bodyItem;
@@ -87,7 +87,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         Vector2 position = dogBody.getPosition();
 
         // 将相机与批处理精灵绑定
-        camera.position.set(0, 5, 0);
+        camera.position.set(0, 2, 0);
         camera.update();
         // 将绘制与相机投影绑定 关键 关键
         batch.setProjectionMatrix(camera.combined);
@@ -95,7 +95,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         batch.draw(dog, position.x - 24 / 2 / reduce, position.y - 24 / 2 / reduce, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
                 0, 0, 24, 24, // 绘制图片的一部分，这里就是全部了
                 1 / reduce, 1 / reduce, // 缩小100倍
-                dogBody.getTransform().getRotation() // 不旋转
+                0 // 不旋转
         );
         batch.end();
 
