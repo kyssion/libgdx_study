@@ -23,15 +23,17 @@ public class MyBox2D extends ApplicationAdapter {
     private Body dogBody;
     private boolean isJump;
 
+    private int ProportionMToP = 100; // box2d 用的是米 , 需要做一个米转像素的设置 , 这里实际100像素=1米
+    private double ProportionPToM = 0.01f; // box2d 用的是米 , 需要做一个像素转米像素的设置 , 这里实际1像素 = 0.01米
+
     @Override
     public void create() {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         dog = new TextureRegion(new Texture("badlogic.jpg"), 50, 50);
-        world = new World(new Vector2(0, -999999999), true);
+        world = new World(new Vector2(0, -9.8f), true);
         debugRenderer = new Box2DDebugRenderer();
-
         BodyDef dogBodyDef = new BodyDef();
         dogBodyDef.type = BodyDef.BodyType.DynamicBody;
         dogBodyDef.position.x = 0;
