@@ -29,12 +29,11 @@ public class TestBox2dV3 extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        // 创建一个相机， 这里缩小64倍，因为要观察的物体需要缩小100倍
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth() / 64, Gdx.graphics.getHeight() / 64);
+        camera.setToOrtho(false, Gdx.graphics.getWidth() / reduce, Gdx.graphics.getHeight() / reduce);
 
         // 图片一： 50*50 缩小100倍就是 0.5*0.5 在绘制时缩小的
-        dog = new TextureRegion(new Texture("badlogic.jpg"), 50, 50);
+        dog = new TextureRegion(new Texture("badlogic.jpg"), 24, 24);
         // 创建一个世界，里面的重力加速度为 10
         world = new World(new Vector2(0, -10), true);
         // 试调渲染，可以使用这个渲染观察到我们用Box2D绘制的物体图形
@@ -48,17 +47,17 @@ public class TestBox2dV3 extends ApplicationAdapter {
         // 创建这个地面的身体，我们对这个物体
         Body groundBody = world.createBody(groundBodyDef);
         PolygonShape groundBox = new PolygonShape();// 物体的形状，这样创建是矩形的
-        groundBox.setAsBox(Gdx.graphics.getWidth(), 10);// 物体的宽高
+        groundBox.setAsBox(Gdx.graphics.getWidth(), 0);// 物体的宽高
         groundBody.createFixture(groundBox, 0); // 静态物体的质量应该设为0
 
         // 再添加一个动态物体，可以把他看成玩家
         BodyDef dogBodyDef = new BodyDef();
         dogBodyDef.type = BodyDef.BodyType.DynamicBody;
-        dogBodyDef.position.x = 10;
-        dogBodyDef.position.y = 20;
+        dogBodyDef.position.x = 0;
+        dogBodyDef.position.y = 10;
         dogBody = world.createBody(dogBodyDef);
         PolygonShape dynamicBox = new PolygonShape();
-        dynamicBox.setAsBox(50 / 2 / reduce, 50 / 2 / reduce);
+        dynamicBox.setAsBox(24 / 2 / reduce, 24 / 2 / reduce);
 
         // 给物体添加一些属性
         FixtureDef fixtureDef = new FixtureDef();
@@ -77,16 +76,15 @@ public class TestBox2dV3 extends ApplicationAdapter {
 
         // 获取 物体的位置
         Vector2 position = dogBody.getPosition();
-        System.out.println(position.x+":"+position.y);
         // 将相机与批处理精灵绑定
-        camera.position.set(10,10, 0);
+        camera.position.set(0,2, 0);
         camera.update();
 
         // 将绘制与相机投影绑定 关键 关键
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(dog, position.x - 50 / 2 / reduce, position.y - 50 / 2 / reduce, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
-                0, 0, 50, 50, // 绘制图片的一部分，这里就是全部了
+        batch.draw(dog, position.x - 24 / 2 / reduce, position.y - 24 / 2 / reduce, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
+                0, 0, 24, 24, // 绘制图片的一部分，这里就是全部了
                 1 / reduce, 1 / reduce, // 缩小100倍
                 0 // 不旋转
         );
