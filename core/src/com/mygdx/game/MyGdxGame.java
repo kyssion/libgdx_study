@@ -19,7 +19,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 		batch.begin();
-		batch.draw(img, 0, 0,0,0,
+		batch.draw(img, 0, 0,(float)img.getWidth()/2,(float)img.getHeight()/2,
 				img.getWidth(),img.getHeight(),
 				1,1,9, // 拉伸和现状
 				0,img.getHeight()-100,100,100, // 这个坐标系是做上角 0,0 向右向下
