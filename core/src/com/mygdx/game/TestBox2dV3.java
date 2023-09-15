@@ -108,8 +108,8 @@ public class TestBox2dV3 extends ApplicationAdapter {
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         int fps =  Gdx.graphics.getFramesPerSecond();
-        if (fps>=30){
-            dogList.add(new Dog(10,10,world,dog).InitBody(reduce));
+        if (fps>=30 && boxNum<=20){
+            dogList.add(new Dog(100,100,world,dog).InitBody(reduce));
             boxNum++;
         }
 
