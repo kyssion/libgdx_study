@@ -28,7 +28,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
     private World world;
     private Box2DDebugRenderer debugRenderer;
     // 在正常像素下物体重力现象不明显，需要对纹理进行缩小100++倍才有比较明显的物理效果
-    private float reduce = 50;// 缩小100 倍易于观察到物理现象'
+    private float reduce = 100;// 缩小100 倍易于观察到物理现象'
     List<Dog> dogList;
     private BitmapFont font;
 
@@ -57,7 +57,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         //设置黑色
         font.setColor(Color.WHITE);
         //设置三倍大小
-        font.getData().setScale(0.01f);
+        font.getData().setScale(0.5f/reduce);
         font.setUseIntegerPositions(false);
         this.boxNum = 0;
     }
@@ -65,7 +65,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
-        groundBodyDef.position.x = 12;// 位置
+        groundBodyDef.position.x = 8;// 位置
         groundBodyDef.position.y = 0;
         // 创建这个地面的身体，我们对这个物体
         Body groundBody = world.createBody(groundBodyDef);
@@ -79,7 +79,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
-        groundBodyDef.position.x = -12;// 位置
+        groundBodyDef.position.x = -8;// 位置
         groundBodyDef.position.y = 0;
         // 创建这个地面的身体，我们对这个物体
         Body groundBody = world.createBody(groundBodyDef);
@@ -109,13 +109,13 @@ public class TestBox2dV3 extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         int fps =  Gdx.graphics.getFramesPerSecond();
         if (fps>=30){
-            dogList.add(new Dog(10,10,world,dog).InitBody(reduce));
+            dogList.add(new Dog(26,26,world,dog).InitBody(reduce));
             boxNum++;
         }
 
 
         // 将相机与批处理精灵绑定
-        camera.position.set(0,8, 0);
+        camera.position.set(0,4, 0);
         camera.update();
 
         // 将绘制与相机投影绑定 关键 关键
@@ -132,7 +132,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         debugRenderer.render(world, camera.combined);
 
         // 更新世界里的关系 这个要放在绘制之后，最好放最后面
-        world.step(1 / 120f, 6, 2);
+        world.step((float) 1 / 60, 6, 2);
     }
 
     @Override
