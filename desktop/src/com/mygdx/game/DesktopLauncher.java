@@ -13,6 +13,6 @@ public class DesktopLauncher {
 		config.setTitle("My GDX Game");
 //		new Lwjgl3Application(new TestBox2dV3(), config);
 //		new Lwjgl3Application(new libgdx文字(), config);
-		new Lwjgl3Application(new OrthographicCameraExample(),config);
+//		new Lwjgl3Application(new OrthographicCameraExample(),config);
 	}
 }
