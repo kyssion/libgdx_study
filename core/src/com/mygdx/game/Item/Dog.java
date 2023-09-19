@@ -13,27 +13,25 @@ public class Dog {
     private Body body;
     private World world;
     private TextureRegion img;
+    private float positionX;
+    private float positionY;
 
-    private float scaleX;
-    private float scaleY;
-
-    public Dog(int height , int width, World world, TextureRegion img) {
+    public Dog(int height , int width, float positionX , float positionY, World world, TextureRegion img) {
         super();
         this.heigth = height;
         this.width = width;
         this.world = world;
         this.img = img;
-        scaleX = (float)this.width/(float)this.img.getRegionWidth();
-        scaleY = (float)this.heigth/(float)this.img.getRegionHeight();
-
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 
     public Dog InitBody(float reduce){
         // 再添加一个动态物体，可以把他看成玩家
         BodyDef dogBodyDef = new BodyDef();
         dogBodyDef.type = BodyDef.BodyType.DynamicBody;
-        dogBodyDef.position.x = 0;
-        dogBodyDef.position.y = 15;
+        dogBodyDef.position.x = this.positionX;
+        dogBodyDef.position.y = this.positionY;
         Body dogBody = world.createBody(dogBodyDef);
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.setAsBox(this.width / 2.0f / reduce, this.heigth / 2.0f / reduce);
@@ -55,8 +53,7 @@ public class Dog {
         batch.draw(this.img, position.x - this.width/ 2.0f / reduce, position.y - this.heigth / 2.0f / reduce, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
                 0, 0, this.width, this.heigth, // 绘制图片的一部分，这里就是全部了
                 1.0f / reduce, 1.0f / reduce, // 缩小100倍0 // 不旋转
-                (float) (this.body.getTransform().getRotation()*Math.PI/2.0*reduce)
-        );
+                0);
     }
 
     public int getHeigth() {

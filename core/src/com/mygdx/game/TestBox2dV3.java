@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,7 +13,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Item.Dog;
+import com.mygdx.game.adapter.MyInputInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,8 @@ public class TestBox2dV3 extends ApplicationAdapter {
     private BitmapFont font;
 
     private int boxNum ;
+
+    private MyInputInfo InputInfo;
 
     @Override
     public void create() {
@@ -60,6 +66,8 @@ public class TestBox2dV3 extends ApplicationAdapter {
         font.getData().setScale(0.01f);
         font.setUseIntegerPositions(false);
         this.boxNum = 0;
+        this.InputInfo = new MyInputInfo(camera);
+        Gdx.input.setInputProcessor(this.InputInfo);
     }
     public void createRight(){
         // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
@@ -108,14 +116,13 @@ public class TestBox2dV3 extends ApplicationAdapter {
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         int fps =  Gdx.graphics.getFramesPerSecond();
-        if (fps>=30 && boxNum<=20){
-            dogList.add(new Dog(100,100,world,dog).InitBody(reduce));
+        if (fps>=30 &&  Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+            dogList.add(new Dog(6,6, this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
             boxNum++;
         }
 
-
         // 将相机与批处理精灵绑定
-        camera.position.set(0,8, 0);
+        camera.position.set(0,7, 0);
         camera.update();
 
         // 将绘制与相机投影绑定 关键 关键
