@@ -32,7 +32,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
     private World world;
     private Box2DDebugRenderer debugRenderer;
     // 在正常像素下物体重力现象不明显，需要对纹理进行缩小100++倍才有比较明显的物理效果
-    private float reduce = 50;//
+    private float reduce = 100;//
     List<Dog> dogList;
     private BitmapFont font;
 
@@ -49,7 +49,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         // 图片一： 50*50 缩小100倍就是 0.5*0.5 在绘制时缩小的
         dog = new TextureRegion(new Texture("badlogic.jpg"));
         // 创建一个世界，里面的重力加速度为 10
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2((float) 0, (float) -9.8), true);
         // 试调渲染，可以使用这个渲染观察到我们用Box2D绘制的物体图形
         debugRenderer = new Box2DDebugRenderer();
 
@@ -74,7 +74,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         int fps =  Gdx.graphics.getFramesPerSecond();
         if (fps>=30 &&  Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            dogList.add(new Dog(20,20, this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
+            dogList.add(new Dog(10,10, this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
             boxNum++;
         }
 
