@@ -8,10 +8,10 @@ import com.mygdx.game.MyGdxGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setWindowedMode(2000,1000);
+		config.setWindowedMode(1200,600);
 		config.setForegroundFPS(120);
 		config.setTitle("My GDX Game");
-		new Lwjgl3Application(new TestBox2dV3(), config);
+		new Lwjgl3Application(new MyGdxGame(), config);
 //		new Lwjgl3Application(new libgdx文字(), config);
 //		new Lwjgl3Application(new OrthographicCameraExample(),config);
 //		new Lwjgl3Application(new libgdx_触摸鼠标(),config);

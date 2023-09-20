@@ -22,8 +22,8 @@ public class Dog {
         this.width = width;
         this.world = world;
         this.img = img;
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.positionX = 0;
+        this.positionY = 60;
     }
 
     public Dog InitBody(float reduce){
