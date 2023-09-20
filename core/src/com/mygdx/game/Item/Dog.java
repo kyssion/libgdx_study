@@ -50,10 +50,10 @@ public class Dog {
     public void Draw( SpriteBatch batch, float reduce){
         // 获取 物体的位置
         Vector2 position = this.body.getPosition();
-        batch.draw(this.img, position.x - this.width / reduce, position.y - this.heigth  / reduce, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
-                this.width/reduce/2, this.heigth/reduce/2, this.width, this.heigth, // 绘制图片的一部分，这里就是全部了
-                1.0f / reduce, 1.0f / reduce, // 缩小100倍0 // 不旋转
-                0);
+        batch.draw(this.img, position.x - this.width / reduce/2, position.y - this.heigth  / reduce/2, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
+                this.width/reduce/2, this.heigth/reduce/2, this.width/reduce, this.heigth/reduce, // 绘制图片的一部分，这里就是全部了
+                1.0f , 1.0f , // 缩小100倍0 // 不旋转
+                (float) (this.body.getTransform().getRotation()*180/Math.PI));
     }
 
     public int getHeigth() {
