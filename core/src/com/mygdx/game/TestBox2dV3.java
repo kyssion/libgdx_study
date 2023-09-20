@@ -32,7 +32,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
     private World world;
     private Box2DDebugRenderer debugRenderer;
     // 在正常像素下物体重力现象不明显，需要对纹理进行缩小100++倍才有比较明显的物理效果
-    private float reduce = 50;// 缩小100 倍易于观察到物理现象'
+    private float reduce = 20;//
     List<Dog> dogList;
     private BitmapFont font;
 
@@ -55,74 +55,31 @@ public class TestBox2dV3 extends ApplicationAdapter {
 
         // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
         createBow();
-        createLeft();
-        createRight();
+        createLeft((int) (Gdx.graphics.getWidth()*0.4));
+        createRight((int) (Gdx.graphics.getWidth()*0.4));
         dogList = new ArrayList<>();
         //读取 .fnt 文件
         font = new BitmapFont(Gdx.files.internal("ziti.fnt"));
         //设置黑色
         font.setColor(Color.WHITE);
         //设置三倍大小
-        font.getData().setScale(0.01f);
+        font.getData().setScale(1/reduce);
         font.setUseIntegerPositions(false);
         this.boxNum = 0;
         this.InputInfo = new MyInputInfo(camera);
         Gdx.input.setInputProcessor(this.InputInfo);
     }
-    public void createRight(){
-        // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
-        groundBodyDef.position.x = 12;// 位置
-        groundBodyDef.position.y = 0;
-        // 创建这个地面的身体，我们对这个物体
-        Body groundBody = world.createBody(groundBodyDef);
-        PolygonShape groundBox = new PolygonShape();// 物体的形状，这样创建是矩形的
-        groundBox.setAsBox(0, Gdx.graphics.getHeight());// 物体的宽高
-        groundBody.createFixture(groundBox, 0); // 静态物体的质量应该设为0
-        // 上面的图形要处理掉
-        groundBox.dispose();
-    }
-    public void createLeft(){
-        // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
-        groundBodyDef.position.x = -12;// 位置
-        groundBodyDef.position.y = 0;
-        // 创建这个地面的身体，我们对这个物体
-        Body groundBody = world.createBody(groundBodyDef);
-        PolygonShape groundBox = new PolygonShape();// 物体的形状，这样创建是矩形的
-        groundBox.setAsBox(0, Gdx.graphics.getHeight());// 物体的宽高
-        groundBody.createFixture(groundBox, 0); // 静态物体的质量应该设为0
-        // 上面的图形要处理掉
-        groundBox.dispose();
-    }
-    public void createBow(){
-        // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
-        groundBodyDef.position.x = 0;// 位置
-        groundBodyDef.position.y = 0;
-        // 创建这个地面的身体，我们对这个物体
-        Body groundBody = world.createBody(groundBodyDef);
-        PolygonShape groundBox = new PolygonShape();// 物体的形状，这样创建是矩形的
-        groundBox.setAsBox(Gdx.graphics.getWidth(), 0);// 物体的宽高
-        groundBody.createFixture(groundBox, 0); // 静态物体的质量应该设为0
-        // 上面的图形要处理掉
-        groundBox.dispose();
-    }
-
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         int fps =  Gdx.graphics.getFramesPerSecond();
         if (fps>=30 &&  Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            dogList.add(new Dog(6,6, this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
+            dogList.add(new Dog((int) (reduce), (int) (reduce), this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
             boxNum++;
         }
 
         // 将相机与批处理精灵绑定
-        camera.position.set(0,7, 0);
+        camera.position.set(0, (float) ((float) Gdx.graphics.getHeight()*0.4/reduce), 0);
         camera.update();
 
         // 将绘制与相机投影绑定 关键 关键
@@ -165,4 +122,48 @@ public class TestBox2dV3 extends ApplicationAdapter {
         this.debugRenderer.dispose();
         this.font.dispose();
     }
+
+    public void createRight(int path){
+        // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
+        groundBodyDef.position.x = path/reduce;// 位置
+        groundBodyDef.position.y = 0;
+        // 创建这个地面的身体，我们对这个物体
+        Body groundBody = world.createBody(groundBodyDef);
+        PolygonShape groundBox = new PolygonShape();// 物体的形状，这样创建是矩形的
+        groundBox.setAsBox(0, Gdx.graphics.getHeight());// 物体的宽高
+        groundBody.createFixture(groundBox, 0); // 静态物体的质量应该设为0
+        // 上面的图形要处理掉
+        groundBox.dispose();
+    }
+    public void createLeft(int path){
+        // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
+        groundBodyDef.position.x = -path/reduce;// 位置
+        groundBodyDef.position.y = 0;
+        // 创建这个地面的身体，我们对这个物体
+        Body groundBody = world.createBody(groundBodyDef);
+        PolygonShape groundBox = new PolygonShape();// 物体的形状，这样创建是矩形的
+        groundBox.setAsBox(0, Gdx.graphics.getHeight());// 物体的宽高
+        groundBody.createFixture(groundBox, 0); // 静态物体的质量应该设为0
+        // 上面的图形要处理掉
+        groundBox.dispose();
+    }
+    public void createBow(){
+        // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
+        groundBodyDef.position.x = 0;// 位置
+        groundBodyDef.position.y = 0;
+        // 创建这个地面的身体，我们对这个物体
+        Body groundBody = world.createBody(groundBodyDef);
+        PolygonShape groundBox = new PolygonShape();// 物体的形状，这样创建是矩形的
+        groundBox.setAsBox(Gdx.graphics.getWidth(), 0);// 物体的宽高
+        groundBody.createFixture(groundBox, 0); // 静态物体的质量应该设为0
+        // 上面的图形要处理掉
+        groundBox.dispose();
+    }
+
 }
