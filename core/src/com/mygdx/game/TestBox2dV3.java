@@ -32,7 +32,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
     private World world;
     private Box2DDebugRenderer debugRenderer;
     // 在正常像素下物体重力现象不明显，需要对纹理进行缩小100++倍才有比较明显的物理效果
-    private float reduce = 20;//
+    private float reduce = 1;//
     List<Dog> dogList;
     private BitmapFont font;
 
@@ -74,7 +74,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         int fps =  Gdx.graphics.getFramesPerSecond();
         if (fps>=30 &&  Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            dogList.add(new Dog((int) (reduce), (int) (reduce), this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
+            dogList.add(new Dog((int) (200/reduce), (int) (200/reduce), this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
             boxNum++;
         }
 

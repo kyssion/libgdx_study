@@ -1,85 +1,98 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 
-public class LibGdx_Box2dTest extends ApplicationAdapter {
-    private SpriteBatch batch;
-    private TextureRegion dog;
-    private OrthographicCamera camera;
+public class LibGdx_Box2dTest implements ApplicationListener {
+
+    protected OrthographicCamera camera;
+    protected Box2DDebugRenderer renderer; // 测试用绘制器
     private World world;
-
-    private float REDUCE = 100;
-
-    public LibGdx_Box2dTest() {
-        super();
-        // 1. 初始化精灵
-        batch = new SpriteBatch();
-        // 2. 初始化正交相机
-        camera = new OrthographicCamera();
-        // 3. 设置相机初始化位置
-        camera.setToOrtho(false, Gdx.graphics.getWidth() / REDUCE, Gdx.graphics.getHeight() / REDUCE);
-
-        // 4. 设置一个需要绘制的纹理
-        dog = new TextureRegion(new Texture("badlogic.jpg"));
-        // 5. 创建一个世界，里面的重力加速度为 10
-        world = new World(new Vector2(0, -10), true);
-        // 6. 创建一个底面
-        createBow();
-        //
-    }
-
-    public void createBow(){
-        // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;// 静态的质量为0
-        groundBodyDef.position.x = 0;// 位置
-        groundBodyDef.position.y = 0;
-        // 创建这个地面的身体，我们对这个物体
-        Body groundBody = world.createBody(groundBodyDef);
-        PolygonShape groundBox = new PolygonShape();// 物体的形状，这样创建是矩形的
-        groundBox.setAsBox(Gdx.graphics.getWidth()*1000, 0);// 物体的宽高
-        groundBody.createFixture(groundBox, 0); // 静态物体的质量应该设为0
-        // 因为调用的外部的c++代码需要手动释放内存
-        groundBox.dispose();
-    }
+    private float scale = 10f; // 屏幕的缩放比例，10像素/米
+    private long start = 0;
+    private Body body;
+    private boolean isFinished = true;
+    private int count = 0;
+    private float totalTime = 0;
 
     @Override
     public void create() {
-        super.create();
-    }
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+        camera = new OrthographicCamera(200/scale, 200/scale);// 这里为了展示物理世界，把视野也转换成m
+        camera.position.set(100/scale, 100/scale, 0);  // 摄像机的postion是画面的中心点
+        renderer = new Box2DDebugRenderer();
 
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
+        world = new World(new Vector2(0, -9.8f), true); // 一般标准重力场
+        BodyDef bd = new BodyDef(); //声明物体定义
+        bd.position.set(10, 20);
+        bd.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bd); //通过world创建一个物体
+        PolygonShape box = new PolygonShape();
+        box.setAsBox(0.5f, 0.5f);   // 注意单位是边长的一半
+        FixtureDef fd = new FixtureDef();
+        fd.shape = box;
+        fd.friction = 0;
+        fd.restitution = 0;
+        fd.density = 1;
+        body.createFixture(fd); //将形状和密度赋给物体
+        body.setLinearDamping(0f);  // 没有线性阻尼
+        body.setAngularDamping(0f); // 没有旋转阻尼
+        body.setAwake(false);
     }
 
     @Override
     public void render() {
-        super.render();
-    }
-
-    @Override
-    public void pause() {
-        super.pause();
-    }
-
-    @Override
-    public void resume() {
-        super.resume();
+        world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
+        if(start == 0) {
+            count = 1;
+            start = System.currentTimeMillis();
+            System.out.println("start postion：" + body.getPosition().y);
+            body.setAwake(true);    // 让渲染的第一帧再让物体运动，这样时间获得才准确，
+            // 否则第一个deltaTime有初始化时间，会让整个计算不准
+        } else {
+            if(isFinished){
+                System.out.println("动画渲染次数： " + count++);
+                System.out.println("物体移动速度: " + body.getLinearVelocity().y);
+                System.out.println("---------------------------------");
+                totalTime += Gdx.app.getGraphics().getDeltaTime();
+            }
+            if(body.getPosition().y <= 0 && isFinished) {
+                System.out.println("实际时间差：" + (System.currentTimeMillis() - start)/1000f);
+                System.out.println("图像增量统计时间差：" + totalTime);
+                System.out.println("end postion：" + body.getPosition().y);
+                isFinished = false;
+                world.destroyBody(body);
+            }
+        }
+        GL20 gl = Gdx.app.getGraphics().getGL20();
+        gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+        renderer.render(world, camera.combined);
     }
 
     @Override
     public void dispose() {
-        super.dispose();
+        renderer.dispose();
+        world.dispose();
+
+        renderer = null;
+        world = null;
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void resume() {
     }
 }
+
