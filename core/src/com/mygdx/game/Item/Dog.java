@@ -22,8 +22,8 @@ public class Dog {
         this.width = width;
         this.world = world;
         this.img = img;
-        this.positionX = 0;
-        this.positionY = 60;
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 
     public Dog InitBody(float reduce){
@@ -50,8 +50,8 @@ public class Dog {
     public void Draw( SpriteBatch batch, float reduce){
         // 获取 物体的位置
         Vector2 position = this.body.getPosition();
-        batch.draw(this.img, position.x - this.width/ 2.0f / reduce, position.y - this.heigth / 2.0f / reduce, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
-                this.width/reduce, this.heigth/reduce, this.width, this.heigth, // 绘制图片的一部分，这里就是全部了
+        batch.draw(this.img, position.x - this.width / reduce, position.y - this.heigth  / reduce, // 设置位置 减少 50/2/reduce 是为了和物体的形状重合
+                this.width/reduce/2, this.heigth/reduce/2, this.width, this.heigth, // 绘制图片的一部分，这里就是全部了
                 1.0f / reduce, 1.0f / reduce, // 缩小100倍0 // 不旋转
                 0);
     }

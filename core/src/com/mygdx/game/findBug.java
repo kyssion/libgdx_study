@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author lingkang
  */
-public class TestBox2dV3 extends ApplicationAdapter {
+public class findBug extends ApplicationAdapter {
     private SpriteBatch batch;
     private TextureRegion  dog;
     private OrthographicCamera camera;

@@ -13,7 +13,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	TextureRegion img;
 	OrthographicCamera camera;
 
-	int reduce= 2;
+	float reduce= 200;
 	@Override
 	public void create () {
 
@@ -32,11 +32,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 
 		batch.begin();
-		batch.draw(img, 0, 0,5,5); // 水平翻转和垂直翻转
+		batch.draw(img, 0- (float) 20 /reduce, 0- (float) 20 /reduce, (float) 20 /reduce, (float) 20 /reduce); // 水平翻转和垂直翻转
 		batch.draw(img, 0, 0,
-				(float)img.getRegionWidth()/2,(float)img.getRegionHeight()/2,
-				img.getRegionWidth(),img.getRegionHeight(),
-				1,1,30); // 水平翻转和垂直翻转
+				30/reduce/2,30/reduce/2,
+				30/reduce,30/reduce,
+				1,1,90); // 水平翻转和垂直翻转
 		batch.end();
 	}
 	

@@ -56,7 +56,6 @@ public class MyInputInfo implements InputProcessor {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         System.out.println("touchDragged: screenX "+screenX +" screenY "+screenY+" pointer "+pointer);
         Vector3 item = this.camera.unproject(this.tp.set(screenX,screenY,0));
-
         return false;
     }
 
