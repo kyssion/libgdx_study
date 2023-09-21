@@ -96,7 +96,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         debugRenderer.render(world, camera.combined);
 
         // 更新世界里的关系 这个要放在绘制之后，最好放最后面
-        world.step(1 / 120f, 6, 2);
+        world.step(1 / 60f, 6, 2);
     }
 
     @Override

@@ -33,17 +33,24 @@ public class Dog {
         dogBodyDef.position.x = this.positionX;
         dogBodyDef.position.y = this.positionY;
         Body dogBody = world.createBody(dogBodyDef);
+
+        CircleShape dynamicBoxV2 = new CircleShape();
+        dynamicBoxV2.setRadius(3f/reduce);
+
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.setAsBox(this.width / 2.0f / reduce, this.heigth / 2.0f / reduce);
 
+
+
         // 给物体添加一些属性
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = dynamicBox;// 形状
+        fixtureDef.shape = dynamicBoxV2;// 形状
         fixtureDef.restitution = (float) Math.random(); // 设置这个值后，物体掉落到地面就会弹起一点高度...
         fixtureDef.density = (float) Math.random();
         dogBody.createFixture(fixtureDef).setUserData(this);//设置自定义数据可以从这个物体获取这个数据对象
         this.body = dogBody;
         dynamicBox.dispose();
+        dynamicBoxV2.dispose();
         return this;
     }
 
