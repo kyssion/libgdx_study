@@ -74,7 +74,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         int fps =  Gdx.graphics.getFramesPerSecond();
         if (fps>=30 &&  Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            dogList.add(new Dog(10,10, this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
+            dogList.add(new Dog(20,20, this.InputInfo.tp.x,  this.InputInfo.tp.y,world,dog).InitBody(reduce));
             boxNum++;
         }
 

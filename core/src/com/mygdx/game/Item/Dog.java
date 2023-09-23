@@ -44,9 +44,9 @@ public class Dog {
 
         // 给物体添加一些属性
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = dynamicBoxV2;// 形状
-        fixtureDef.restitution = (float) Math.random(); // 设置这个值后，物体掉落到地面就会弹起一点高度...
-        fixtureDef.density = (float) Math.random();
+        fixtureDef.shape = dynamicBox;// 形状
+        fixtureDef.restitution = 0.1f; // 设置这个值后，物体掉落到地面就会弹起一点高度...
+        fixtureDef.density = 0.2f;
         dogBody.createFixture(fixtureDef).setUserData(this);//设置自定义数据可以从这个物体获取这个数据对象
         this.body = dogBody;
         dynamicBox.dispose();
