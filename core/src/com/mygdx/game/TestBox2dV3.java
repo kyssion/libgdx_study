@@ -55,8 +55,8 @@ public class TestBox2dV3 extends ApplicationAdapter {
 
         // 创建一个地面，其实是一个静态物体，这里我们叫它地面，玩家可以走在上面
         createBow();
-        createLeft((int) (Gdx.graphics.getWidth()*0.4));
-        createRight((int) (Gdx.graphics.getWidth()*0.4));
+        createLeft((int) (Gdx.graphics.getWidth()*0.48));
+        createRight((int) (Gdx.graphics.getWidth()*0.48));
         dogList = new ArrayList<>();
         //读取 .fnt 文件
         font = new BitmapFont(Gdx.files.internal("ziti.fnt"));
@@ -96,7 +96,7 @@ public class TestBox2dV3 extends ApplicationAdapter {
         debugRenderer.render(world, camera.combined);
 
         // 更新世界里的关系 这个要放在绘制之后，最好放最后面
-        world.step(1 / 60f, 6, 2);
+        world.step(1 / 200f, 10, 8);
     }
 
     @Override
